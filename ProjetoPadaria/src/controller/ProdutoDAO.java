@@ -1,6 +1,5 @@
 package controller;
 
-import com.mysql.cj.xdevapi.SqlResultBuilder;
 import java.awt.HeadlessException;
 import model.Produto;
 import java.sql.*;
@@ -151,24 +150,30 @@ public class ProdutoDAO {
         }
     }
 
-    public List<Produto> pesquisaDuploValorProduto(Produto prod, Double valorAte, Double pesoAte) {
+    public List<Produto> pesquisaDuploValorProduto(Produto prod, Produto prodAte) {
         List<Produto> lista = new ArrayList<Produto>();
         List<String> wheres = new ArrayList<String>();
         List<Double> obj = new ArrayList<Double>();
-        System.out.println(prod.getValor());
-        System.out.println(valorAte);
+        System.out.println(prod.getPeso());
+        System.out.println(prodAte.getPeso());        
         try {
             String sql = "select * from produto where ";
-            
             if(prod.getValor() != 0.0) {
                 wheres.add("valor >= ? ");
                 obj.add(prod.getValor());
             } 
-            if(valorAte != 0.0) {
+            if(prodAte.getValor() != 0.0) {
                 wheres.add("valor <= ? ");
-                obj.add(valorAte);
+                obj.add(prodAte.getValor());
             }
-            System.out.println(wheres);
+            if(prod.getPeso() != 0.0) {
+                wheres.add("peso >= ? ");
+                obj.add(prod.getPeso());
+            } 
+            if(prodAte.getPeso() != 0.0) {
+                wheres.add("peso <= ? ");
+                obj.add(prodAte.getPeso());
+            }
             if(!wheres.isEmpty()) {
                 for(String w : wheres) {
                     if(wheres.get(0).equals(w)) {
@@ -178,8 +183,7 @@ public class ProdutoDAO {
                     }
                 }
             }
-            System.out.println(wheres);
-            System.out.println(obj);
+            System.out.println(sql);
             cmd = conexao.prepareStatement(sql);
             int contador = 1;
             for(Double v : obj) {
@@ -188,7 +192,6 @@ public class ProdutoDAO {
             }
             System.out.println(sql);
             ResultSet rs = cmd.executeQuery();
-            System.out.println(sql);
             while (rs.next()) {
                 Produto p = new Produto();
                 p.setId(rs.getInt("id"));

@@ -237,12 +237,12 @@ public class PesquisarProdutoValorPeso extends javax.swing.JFrame {
         Double valorAte = !fldValorAte.getText().equals("") ? Double.parseDouble(fldValorAte.getText()) : 0.0;
         Double peso = !fldPeso.getText().equals("") ? Double.parseDouble(fldPeso.getText()) : 0.0;
         Double pesoAte = !fldPesoAte.getText().equals("") ? Double.parseDouble(fldPesoAte.getText()) : 0.0;
-        System.out.println(valor);
-        System.out.println(valorAte);
         if ((valor != 0.0 || valorAte != 0.0) || (peso != 0.0 || pesoAte != 0.0)) {
             prod.setValor(valor);
             prod.setPeso(peso);
-            preencherTabela(new ProdutoDAO().pesquisaDuploValorProduto(prod, valorAte, pesoAte));
+            prodAte.setValor(valorAte);
+            prodAte.setPeso(pesoAte);
+            preencherTabela(new ProdutoDAO().pesquisaDuploValorProduto(prod, prodAte));
         } else {
             preencherTabela(new ProdutoDAO().listaProdutos());
         }
