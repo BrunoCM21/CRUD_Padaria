@@ -2,12 +2,9 @@ package view;
 
 import controller.ProdutoDAO;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import model.Produto;
-import view.RoundedBorder;
 
 public class DeletaProduto extends javax.swing.JFrame {
 
