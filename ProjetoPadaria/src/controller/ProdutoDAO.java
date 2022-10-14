@@ -38,6 +38,29 @@ public class ProdutoDAO {
             Conexao.DesconectarBD(conexao);
         }
     }
+    
+    public int alteraProduto(Produto p) {
+        try {
+            String sql = "update produto set nome_marca = ?, valor = ?, peso = ? where id = ?";
+            cmd = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            cmd.setString(1, p.getNomeMarca());
+            cmd.setDouble(2, p.getPeso());
+            cmd.setDouble(3, p.getValor());
+            cmd.setInt(4, p.getId());
+
+            if (cmd.executeUpdate() > 0) {
+                return p.getId();
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            System.out.println("ERRO" + e.getMessage());
+            return -1;
+        } finally {
+            Conexao.DesconectarBD(conexao);
+        }
+    }
+    
 
     public int deletaProduto(Produto p) {
         try {

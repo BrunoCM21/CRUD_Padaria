@@ -3,6 +3,7 @@ package view;
 import controller.ProdutoDAO;
 import java.awt.Color;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Produto;
 
@@ -178,9 +179,12 @@ public class DeletaProduto extends javax.swing.JFrame {
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarActionPerformed
         Produto prod = new Produto();
-        prod.setId(Integer.parseInt(fldId.getText()));
-        pDAO.deletaProduto(prod);
-        preencherTabela(new ProdutoDAO().listaProdutos());
+        int escolha = JOptionPane.showConfirmDialog(null, "Realmente deseja excluir o Produto?", "Deletar Produto", JOptionPane.YES_NO_OPTION);
+        if(escolha == JOptionPane.YES_OPTION) {
+            prod.setId(Integer.parseInt(fldId.getText()));
+            pDAO.deletaProduto(prod);
+            preencherTabela(new ProdutoDAO().listaProdutos());
+        }
     }//GEN-LAST:event_btnDeletarActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked

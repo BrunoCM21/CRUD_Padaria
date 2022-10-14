@@ -71,10 +71,7 @@
                   <EmptySpace min="110" pref="110" max="-2" attributes="0"/>
                   <Component id="btnExcluir" min="-2" pref="110" max="-2" attributes="0"/>
               </Group>
-              <Group type="102" attributes="0">
-                  <EmptySpace min="240" pref="240" max="-2" attributes="0"/>
-                  <Component id="btnSair" min="-2" pref="110" max="-2" attributes="0"/>
-              </Group>
+              <Component id="btnSair" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -120,7 +117,7 @@
               <Font name="Tahoma" size="16" style="0"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Bem-vindo #NOME#"/>
+            <Property name="text" type="java.lang.String" value="Bem-vindo"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnSair">

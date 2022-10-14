@@ -93,9 +93,9 @@ public class MenuListarProdutos extends javax.swing.JFrame {
         desktopPaneLayout.setHorizontalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(desktopPaneLayout.createSequentialGroup()
-                .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelGrandeMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelGrandeMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, desktopPaneLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -160,11 +160,15 @@ public class MenuListarProdutos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPesquisaIdActionPerformed
 
     private void btnPesquisaNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaNomeActionPerformed
-        // TODO add your handling code here:
+        PesquisarProdutoNome ppn = new PesquisarProdutoNome();
+        ppn.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnPesquisaNomeActionPerformed
 
     private void btnPesquisaValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaValorActionPerformed
-        // TODO add your handling code here:
+        PesquisarProdutoValorPeso ppvp = new PesquisarProdutoValorPeso();
+        ppvp.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnPesquisaValorActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed

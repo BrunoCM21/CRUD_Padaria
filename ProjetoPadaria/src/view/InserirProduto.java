@@ -162,6 +162,7 @@ public class InserirProduto extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         controleEstado(false);
+        limpaFormularioInserir();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirActionPerformed
@@ -179,16 +180,19 @@ public class InserirProduto extends javax.swing.JFrame {
         if(p.getId() == 0) {
             retorno = pDAO.insereProduto(p);
             txtId.setText(retorno != -1 ? String.valueOf(retorno) : "0");
+            if(retorno != -1) {
+                JOptionPane.showMessageDialog(null, "Produto inserido com sucesso.", "Produtos", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível inserir o registro.", "Produtos", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
-            //retorno = pDAO.alteraPaciente(p);
+            retorno = pDAO.alteraProduto(p);
+            if(retorno != -1) {
+                JOptionPane.showMessageDialog(null, "Produto alterado com sucesso.", "Produtos", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível alterar o registro.", "Produtos", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        
-        if(retorno != -1) {
-            JOptionPane.showMessageDialog(null, "Registro feito com sucesso.", "Pacientes", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Não foi possível concluir o registro..", "Pacientes", JOptionPane.ERROR_MESSAGE);
-        }
-        
         controleEstado(false);
     }//GEN-LAST:event_btnInserirActionPerformed
 
@@ -222,8 +226,12 @@ public class InserirProduto extends javax.swing.JFrame {
      */
     private void configuraFormularioInserir() {
         this.setResizable(false);
-        this.setTitle("Inserir Paciente");
+        this.setTitle("Inserir Produto");
         this.setLocationRelativeTo(null);
+        txtValor.setToolTipText("Insira o valor do Produto");
+        txtNome.setToolTipText("Insira o nome do Produto/Marca");
+        txtId.setToolTipText("Insira o identificador do Produto");
+        txtPeso.setToolTipText("Insira o peso do Produto");
         
         controleEstado(false);
     }
@@ -236,31 +244,14 @@ public class InserirProduto extends javax.swing.JFrame {
         btnInserir.setEnabled(controlador);
         btnNovo.setEnabled(!controlador);
         if(controlador) {
-            prencheFormularioInserir();
-        } else {
             limpaFormularioInserir();
         }
     }
     
     private void limpaFormularioInserir() {
-        txtValor.setText("Insira o valor do Produto");
-        txtId.setText("Insira o identificador do Produto");
-        txtNome.setText("Insira o nome do Produto");
-        txtPeso.setText("Insira o peso do Produto");
-        txtValor.setToolTipText("");
-        txtNome.setToolTipText("");
-        txtId.setToolTipText("");
-        txtPeso.setToolTipText("");
-    }
-    
-    private void prencheFormularioInserir() {
         txtValor.setText("");
         txtId.setText("");
         txtNome.setText("");
         txtPeso.setText("");
-        txtValor.setToolTipText("Insira a altura do Paciente");
-        txtNome.setToolTipText("Insira o nome do Paciente");
-        txtId.setToolTipText("Insira o identificador do Paciente");
-        txtPeso.setToolTipText("Insira o peso do Paciente");
     }
 }

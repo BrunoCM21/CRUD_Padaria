@@ -1,6 +1,6 @@
 package model;
 
-public class Produto {
+public class Produto implements Cloneable{
 
     private int id;
     private String nomeMarca;
@@ -72,5 +72,16 @@ public class Produto {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public Produto clone() {
+ 
+	Produto p = new Produto();
+        p.setId(this.id);
+	p.setNomeMarca(this.nomeMarca);
+        p.setPeso(this.peso);
+        p.setValor(this.valor);
+        return p;
     }
 }

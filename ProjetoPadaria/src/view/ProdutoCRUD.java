@@ -2,6 +2,7 @@ package view;
 
 import controller.ProdutoDAO;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -10,11 +11,13 @@ import model.Produto;
 public class ProdutoCRUD extends javax.swing.JFrame {
     
     private String idAntigo = "";
+    private List<Produto> listaProd;
 
     public ProdutoCRUD() {
         initComponents();
         configuraFormulario();
         txtId.setEditable(true); 
+        this.listaProd = new ArrayList<Produto>();
     }
 
     @SuppressWarnings("unchecked")
@@ -230,14 +233,21 @@ public class ProdutoCRUD extends javax.swing.JFrame {
         if(p.getId() == 0) {
             retorno = pDAO.insereProduto(p);
             txtId.setText(retorno != -1 ? String.valueOf(retorno) : "0");
+            if(retorno != -1) {
+                JOptionPane.showMessageDialog(null, "Produto inserido com sucesso.", "Produtos", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível inserir o registro.", "Produtos", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
-            //retorno = pDAO.alteraPaciente(p);
+            retorno = pDAO.alteraProduto(p);
+            if(retorno != -1) {
+                JOptionPane.showMessageDialog(null, "Produto alterado com sucesso.", "Produtos", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível alterar o registro.", "Produtos", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        
-        if(retorno != -1) {
-            JOptionPane.showMessageDialog(null, "Produto inserido com sucesso.", "Produtos", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Não foi possível inserir o registro.", "Produtos", JOptionPane.ERROR_MESSAGE);
+        if(retorno != -1 && !listaProd.isEmpty()){
+            preencherTabela(new ProdutoDAO().listaProdutos());
         }
         controleEstadoBotoes(false);
     }//GEN-LAST:event_btnInserirActionPerformed
@@ -257,21 +267,53 @@ public class ProdutoCRUD extends javax.swing.JFrame {
                 idAntigo = txtId.getText();
                 controleEstadoFormulario(true);
                 controleEstadoBotoes(false);
+            } else {
+                JOptionPane.showMessageDialog(null, "Produto não encontrado!", "Produtos", JOptionPane.INFORMATION_MESSAGE);
+                limpaFormulario();
+                controleEstadoFormulario(true);
+                controleEstadoBotoes(true);
             }
+        } else {
+            limpaFormulario();
+            controleEstadoFormulario(true);
+            controleEstadoBotoes(true);
         }
     }//GEN-LAST:event_txtIdFocusLost
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
         Produto prod = new Produto();
         ProdutoDAO pDAO = new ProdutoDAO();
-        prod.setId(Integer.parseInt(txtId.getText()));
-        pDAO.deletaProduto(prod);
-        configuraFormulario();
-        limpaFormulario();
+        int escolha = JOptionPane.showConfirmDialog(null, "Realmente deseja excluir o Produto?", "Deletar Produto", JOptionPane.YES_NO_OPTION);
+        if(escolha == JOptionPane.YES_OPTION) {        
+            prod.setId(Integer.parseInt(txtId.getText()));
+            pDAO.deletaProduto(prod);
+            if(!listaProd.isEmpty()){
+                preencherTabela(new ProdutoDAO().listaProdutos());
+            }
+            configuraFormulario();
+            limpaFormulario();            
+        }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        // TODO add your handling code here:
+        ProdutoDAO pDAO = new ProdutoDAO();
+        Produto p = new Produto();
+        
+        p.setId(Integer.valueOf(txtId.getText()));
+        p.setNomeMarca(txtNome.getText());
+        p.setPeso(Double.valueOf(txtPeso.getText()));
+        p.setValor(Double.valueOf(txtValor.getText()));
+        
+        int retorno = pDAO.alteraProduto(p);
+        if(retorno != -1) {
+            JOptionPane.showMessageDialog(null, "Produto alterado com sucesso.", "Produtos", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Não foi possível alterar o registro.", "Produtos", JOptionPane.ERROR_MESSAGE);
+        }
+        if (retorno != -1 && !listaProd.isEmpty()) {
+            preencherTabela(new ProdutoDAO().listaProdutos());
+        }
+        controleEstadoBotoes(false);
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
@@ -288,10 +330,12 @@ public class ProdutoCRUD extends javax.swing.JFrame {
         controleEstadoBotoes(false);
         int linha = tabelaProdutos.getSelectedRow();
         if (linha >= 0) {
-            txtId.setText(tabelaProdutos.getValueAt(linha, 0).toString());
-            txtNome.setText(tabelaProdutos.getValueAt(linha, 1).toString());
-            txtPeso.setText(tabelaProdutos.getValueAt(linha, 2).toString());
-            txtValor.setText(tabelaProdutos.getValueAt(linha, 3).toString());
+            if(tabelaProdutos.getValueAt(linha, 0) != null) {
+                txtId.setText(tabelaProdutos.getValueAt(linha, 0).toString());
+                txtNome.setText(tabelaProdutos.getValueAt(linha, 1).toString());
+                txtPeso.setText(tabelaProdutos.getValueAt(linha, 2).toString());
+                txtValor.setText(tabelaProdutos.getValueAt(linha, 3).toString());
+            }
         }
     }//GEN-LAST:event_tabelaProdutosMouseClicked
 
@@ -331,10 +375,10 @@ public class ProdutoCRUD extends javax.swing.JFrame {
         this.setResizable(false);
         this.setTitle("Produto");
         this.setLocationRelativeTo(null);
-        txtValor.setToolTipText("Insira a altura do Paciente");
-        txtNome.setToolTipText("Insira o nome do Paciente");
-        txtId.setToolTipText("Insira o identificador do Paciente");
-        txtPeso.setToolTipText("Insira o peso do Paciente");
+        txtValor.setToolTipText("Insira o valor do Produto");
+        txtNome.setToolTipText("Insira o nome do Produto/Marca");
+        txtId.setToolTipText("Insira o identificador do Produto");
+        txtPeso.setToolTipText("Insira o peso do Produto");
         controleEstadoFormulario(true);
         controleEstadoBotoes(true);
     }
@@ -362,10 +406,12 @@ public class ProdutoCRUD extends javax.swing.JFrame {
     }
     
     private void preencherTabela(List<Produto> lista){
+        this.listaProd = new ArrayList<Produto>();
         if(lista.size()>0){
             configuraTabela();
             DefaultTableModel m = (DefaultTableModel)tabelaProdutos.getModel();
             for(Produto p : lista){
+                this.listaProd.add(p.clone());
                 m.addRow(new Object[]{
                 p.getId(), p.getNomeMarca(), p.getPeso(), p.getValor()
             });
@@ -387,5 +433,21 @@ public class ProdutoCRUD extends javax.swing.JFrame {
             m.addColumn("Valor"); 
 
             tabelaProdutos.setModel(m); 
+    }
+    
+    public String getIdAntigo() {
+        return idAntigo;
+    }
+
+    public void setIdAntigo(String idAntigo) {
+        this.idAntigo = idAntigo;
+    }
+
+    public List<Produto> getListaProd() {
+        return listaProd;
+    }
+
+    public void setListaProd(List<Produto> listaProd) {
+        this.listaProd = listaProd;
     }
 }

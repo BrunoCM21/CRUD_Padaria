@@ -12,7 +12,7 @@ public class AlteraProduto extends javax.swing.JFrame {
 
     public AlteraProduto() {
         initComponents();
-        configuraFormularioInserir();
+        configuraFormularioAlterar();
         txtId.setEditable(true); 
     }
 
@@ -27,7 +27,6 @@ public class AlteraProduto extends javax.swing.JFrame {
         labelNome = new javax.swing.JLabel();
         labelValor = new javax.swing.JLabel();
         btnVoltar = new javax.swing.JButton();
-        btnNovo = new javax.swing.JButton();
         btnPesquisarNovamente = new javax.swing.JButton();
         btnAlterar = new javax.swing.JButton();
         txtPeso = new javax.swing.JTextField();
@@ -80,19 +79,6 @@ public class AlteraProduto extends javax.swing.JFrame {
         btnVoltar.setBorder(new RoundedBorder(10));
         btnVoltar.setForeground(Color.BLACK);
 
-        btnNovo.setBackground(new java.awt.Color(255, 255, 255));
-        btnNovo.setFont(new java.awt.Font("Georgia", 1, 11)); // NOI18N
-        btnNovo.setText("Criar Novo");
-        btnNovo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNovoActionPerformed(evt);
-            }
-        });
-        desktopPane.add(btnNovo);
-        btnNovo.setBounds(230, 250, 110, 30);
-        btnNovo.setBorder(new RoundedBorder(10));
-        btnNovo.setForeground(Color.BLACK);
-
         btnPesquisarNovamente.setBackground(new java.awt.Color(255, 255, 255));
         btnPesquisarNovamente.setFont(new java.awt.Font("Georgia", 1, 11)); // NOI18N
         btnPesquisarNovamente.setText("Pesquisar Outro ID");
@@ -103,8 +89,8 @@ public class AlteraProduto extends javax.swing.JFrame {
         });
         desktopPane.add(btnPesquisarNovamente);
         btnPesquisarNovamente.setBounds(350, 250, 160, 30);
-        btnNovo.setBorder(new RoundedBorder(10));
-        btnNovo.setForeground(Color.BLACK);
+        btnPesquisarNovamente.setBorder(new RoundedBorder(10));
+        btnPesquisarNovamente.setForeground(Color.BLACK);
 
         btnAlterar.setBackground(new java.awt.Color(255, 255, 255));
         btnAlterar.setFont(new java.awt.Font("Georgia", 1, 11)); // NOI18N
@@ -169,18 +155,21 @@ public class AlteraProduto extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        InserirProduto ip = new InserirProduto();
-        ip.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnNovoActionPerformed
-
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        txtId.setText("");
-        txtNome.setText("");
-        txtPeso.setText("");
-        txtValor.setText("");
-        controleEstado(false);
+        ProdutoDAO pDAO = new ProdutoDAO();
+        Produto p = new Produto();
+        
+        p.setId(Integer.valueOf(txtId.getText()));
+        p.setNomeMarca(txtNome.getText());
+        p.setPeso(Double.valueOf(txtPeso.getText()));
+        p.setValor(Double.valueOf(txtValor.getText()));
+        
+        int retorno = pDAO.alteraProduto(p);
+        if(retorno != -1) {
+            JOptionPane.showMessageDialog(null, "Produto alterado com sucesso.", "Produtos", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Não foi possível alterar o registro.", "Produtos", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
@@ -189,30 +178,29 @@ public class AlteraProduto extends javax.swing.JFrame {
 
     private void txtIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdFocusLost
         Produto prod = new Produto();
-        System.out.println("Teste entrada");
         String id = txtId.getText();
-        System.out.println(id);
         prod.setId(Integer.parseInt(id));
-        System.out.println(!id.equals(""));
-        System.out.println(!id.equals(idAntigo));
         if (!id.equals("") && !id.equals(idAntigo)) {
             ProdutoDAO pDao = new ProdutoDAO();
             List<Produto> listaRet = pDao.pesquisaProdutoID(prod, false);
-            System.out.println(listaRet);
             if(!listaRet.isEmpty()){
-                System.out.println(prod.getId());
                 Produto prodRet = listaRet.get(0);
                 txtNome.setText(prodRet.getNomeMarca());
                 txtPeso.setText(String.valueOf(prodRet.getPeso()));
                 txtValor.setText(String.valueOf(prodRet.getValor()));
                 controleEstado(true);
                 idAntigo = txtId.getText();
+            }else {
+                JOptionPane.showMessageDialog(null, "Produto não encontrado!", "Produtos", JOptionPane.INFORMATION_MESSAGE);
+                controleEstado(false);
+                txtId.setText("");
             }
         }
     }//GEN-LAST:event_txtIdFocusLost
 
     private void btnPesquisarNovamenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarNovamenteActionPerformed
-        // TODO add your handling code here:
+        controleEstado(false);
+        txtId.setText("");
     }//GEN-LAST:event_btnPesquisarNovamenteActionPerformed
 
     public static void main(String args[]) {
@@ -225,7 +213,6 @@ public class AlteraProduto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterar;
-    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPesquisarNovamente;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JDesktopPane desktopPane;
@@ -243,11 +230,15 @@ public class AlteraProduto extends javax.swing.JFrame {
     /**
      * Inicia o formulário da tela
      */
-    private void configuraFormularioInserir() {
+    private void configuraFormularioAlterar() {
         this.setResizable(false);
-        this.setTitle("Inserir Paciente");
+        this.setTitle("Alterar Produto");
         this.setLocationRelativeTo(null);
         controleEstado(false);
+        txtValor.setToolTipText("Insira o valor do Produto");
+        txtNome.setToolTipText("Insira o nome do Produto/Marca");
+        txtId.setToolTipText("Insira o identificador do Produto");
+        txtPeso.setToolTipText("Insira o peso do Produto");
     }
     
     private void controleEstado(boolean controlador){    
@@ -256,33 +247,14 @@ public class AlteraProduto extends javax.swing.JFrame {
         txtNome.setEditable(controlador);
         txtId.setEditable(!controlador);
         btnAlterar.setEnabled(controlador);
-        btnNovo.setEnabled(!controlador);
-        if(controlador) {
-            prencheFormularioInserir();
-        } else {
-            limpaFormularioInserir();
+        if(!controlador) {
+            limpaFormularioAlterar();
         }
     }
     
-    private void limpaFormularioInserir() {
-        txtValor.setText("Insira o valor do Produto");
-        txtId.setText("");
-        txtNome.setText("Insira o nome do Produto");
-        txtPeso.setText("Insira o peso do Produto");
-        txtValor.setToolTipText("");
-        txtNome.setToolTipText("");
-        txtId.setToolTipText("");
-        txtPeso.setToolTipText("");
-    }
-    
-    private void prencheFormularioInserir() {
+    private void limpaFormularioAlterar() {
         txtValor.setText("");
-        txtId.setText("Insira o identificador do Produto");
         txtNome.setText("");
-        txtPeso.setText("");
-        txtValor.setToolTipText("Insira a altura do Paciente");
-        txtNome.setToolTipText("Insira o nome do Paciente");
-        txtId.setToolTipText("Insira o identificador do Paciente");
-        txtPeso.setToolTipText("Insira o peso do Paciente");
+        txtPeso.setText("");   
     }
 }

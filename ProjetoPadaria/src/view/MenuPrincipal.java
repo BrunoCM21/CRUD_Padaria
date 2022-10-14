@@ -40,7 +40,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         labelWelcome.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         labelWelcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelWelcome.setText("Bem-vindo #NOME#");
+        labelWelcome.setText("Bem-vindo");
 
         btnSair.setBackground(new java.awt.Color(255, 255, 255));
         btnSair.setFont(new java.awt.Font("Georgia", 1, 11)); // NOI18N
@@ -128,9 +128,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(desktopPaneLayout.createSequentialGroup()
                 .addGap(110, 110, 110)
                 .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(desktopPaneLayout.createSequentialGroup()
-                .addGap(240, 240, 240)
-                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,7 +178,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrudActionPerformed
-        // TODO add your handling code here:
+        ProdutoCRUD pCRUD = new ProdutoCRUD();
+        pCRUD.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCrudActionPerformed
 
     private void btnInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirActionPerformed
@@ -196,7 +196,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnListagensActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        // TODO add your handling code here:
+        AlteraProduto ap = new AlteraProduto();
+        ap.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
