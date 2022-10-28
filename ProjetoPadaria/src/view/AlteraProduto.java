@@ -179,22 +179,32 @@ public class AlteraProduto extends javax.swing.JFrame {
     private void txtIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdFocusLost
         Produto prod = new Produto();
         String id = txtId.getText();
-        prod.setId(Integer.parseInt(id));
-        if (!id.equals("") && !id.equals(idAntigo)) {
-            ProdutoDAO pDao = new ProdutoDAO();
-            List<Produto> listaRet = pDao.pesquisaProdutoID(prod, false);
-            if(!listaRet.isEmpty()){
-                Produto prodRet = listaRet.get(0);
-                txtNome.setText(prodRet.getNomeMarca());
-                txtPeso.setText(String.valueOf(prodRet.getPeso()));
-                txtValor.setText(String.valueOf(prodRet.getValor()));
-                controleEstado(true);
-                idAntigo = txtId.getText();
-            }else {
-                JOptionPane.showMessageDialog(null, "Produto não encontrado!", "Produtos", JOptionPane.INFORMATION_MESSAGE);
-                controleEstado(false);
-                txtId.setText("");
+        try {
+            prod.setId(Integer.parseInt(id));
+            if (!id.equals("") && !id.equals(idAntigo)) {
+                ProdutoDAO pDao = new ProdutoDAO();
+                List<Produto> listaRet = pDao.pesquisaProdutoID(prod, false);
+                if(!listaRet.isEmpty()){
+                    Produto prodRet = listaRet.get(0);
+                    txtNome.setText(prodRet.getNomeMarca());
+                    txtPeso.setText(String.valueOf(prodRet.getPeso()));
+                    txtValor.setText(String.valueOf(prodRet.getValor()));
+                    controleEstado(true);
+                    idAntigo = txtId.getText();
+                }else {
+                    JOptionPane.showMessageDialog(null, "Produto não encontrado!", "Produtos", JOptionPane.INFORMATION_MESSAGE);
+                    controleEstado(false);
+                    txtId.setText("");
+                }
             }
+        } catch(NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(null, "Produto não encontrado!", "Produtos", JOptionPane.INFORMATION_MESSAGE);
+            controleEstado(false);
+            txtId.setText("");
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro na pesquisa do Produto! Reiniciando pesquisa." + e, "Produtos", JOptionPane.INFORMATION_MESSAGE);
+            controleEstado(false);
+            txtId.setText("");
         }
     }//GEN-LAST:event_txtIdFocusLost
 
